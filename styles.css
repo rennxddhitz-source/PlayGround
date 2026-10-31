@@ -1,0 +1,160 @@
+@font-face {
+  font-family: "Baloo 2";
+  src: url("./assets/fonts/baloo2.woff2") format("woff2");
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lilita One";
+  src: url("./assets/fonts/lilita.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --ink: #15132b;
+  --night: #1a1a2e;
+  --night-deep: #0c0b19;
+  --gold: #ffd700;
+  --cyan: #00d4ff;
+  --cream: #fff5d6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--night-deep);
+}
+
+body {
+  display: grid;
+  place-items: center;
+  font-family: "Baloo 2", system-ui, sans-serif;
+  color: var(--cream);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(155, 93, 229, 0.2), transparent 24%),
+    radial-gradient(circle at 82% 78%, rgba(0, 212, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 50% 46%, #24213d 0%, #121126 58%, #080711 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(255, 215, 0, 0.35) 0 1px, transparent 1.5px);
+  background-position: 0 0, 43px 71px;
+  background-size: 93px 97px, 151px 139px;
+}
+
+#stage {
+  position: relative;
+  width: min(100vw, calc(100dvh * 0.562));
+  height: min(100dvh, calc(100vw / 0.562));
+  max-width: 480px;
+  max-height: 854px;
+  overflow: hidden;
+  background: #17152b;
+  border-radius: clamp(0px, 2.8vw, 30px);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 70px rgba(0, 212, 255, 0.08);
+  touch-action: none;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: pointer;
+}
+
+#rotate-hint {
+  display: none;
+}
+
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #0c0b19;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+#boot.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-star {
+  color: var(--gold);
+  font-size: 54px;
+  filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.8));
+  animation: twinkle 1.4s ease-in-out infinite;
+}
+
+.boot-title {
+  font-family: "Lilita One", sans-serif;
+  font-size: clamp(22px, 7vw, 36px);
+  letter-spacing: 1px;
+  color: var(--cream);
+  text-shadow: 0 4px 0 #5d3a95;
+}
+
+.boot-title i {
+  color: var(--gold);
+  font-style: normal;
+}
+
+.boot-sub {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9c96bd;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.82) rotate(-8deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1) rotate(8deg);
+    opacity: 1;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  #rotate-hint {
+    position: fixed;
+    inset: auto 0 12px;
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    pointer-events: none;
+  }
+}
