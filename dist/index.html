@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayGround Modul 0</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; background: #1a1a2e; color: #e0e0e0; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .constant { background: #16213e; margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 4px; }
+    .state { display: inline-block; padding: 0.2rem 0.5rem; background: #0f3460; border-radius: 3px; margin: 0.1rem; }
+    .event { background: #16213e; margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 4px; }
+    .save-data { background: #16213e; margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 4px; }
+    code { background: #0f3460; padding: 0.2rem 0.4rem; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Modul 0: Fondasi — Lapisan A</h1>
+    
+    <h2>Constants</h2>
+    <div id="constants" class="constants">
+      <em>Loading...</em>
+    </div>
+    
+    <h2>Game State Manager</h2>
+    <div id="state" class="state">LOBBY</div>
+    <button onclick="transitionState('MATCHMAKING')">→ MATCHMAKING</button>
+    <button onclick="transitionState('IN_GAME')">→ IN_GAME</button>
+    <button onclick="transitionState('POST_MATCH')">→ POST_MATCH</button>
+    <button onclick="transitionState('LOBBY')">→ LOBBY</button>
+    
+    <h2>Global Event Bus</h2>
+    <div id="events" class="events">
+      <em>No events yet</em>
+    </div>
+    <button onclick="triggerEvent('ON_GAME_START')">ON_GAME_START</button>
+    <button onclick="triggerEvent('ON_HERO_DEATH')">ON_HERO_DEATH</button>
+    <button onclick="triggerEvent('ON_MATCH_END')">ON_MATCH_END</button>
+    
+    <h2>Save System</h2>
+    <div id="save" class="save-data">
+      <em>No save data loaded</em>
+    </div>
+    <button onclick="testSave()">Test Save/Load</button>
+    
+    <script type="module">
+      import { GameState, GameStateManager } from './Scripts/GameStateManager.js';
+      import { GlobalEventBus } from './Scripts/GlobalEventBus.js';
+      import { SaveSystem } from './Scripts/SaveSystem.js';
+      import constants from './Data/Constants.json' with { type: 'json' };
+      
+      // Render constants
+      const constantsDiv = document.getElementById('constants');
+      constantsDiv.innerHTML = '';
+      for (const [key, value] of Object.entries(constants)) {
+        const div = document.createElement('div');
+        div.className = 'constant';
+        div.innerHTML = `<span class="code">${key}</span>: ${value}`;
+        constantsDiv.appendChild(div);
+      }
+      
+      // GameStateManager
+      const gsm = new GameStateManager();
+      const stateDisplay = document.getElementById('state');
+      gsm.addStateListener((newState, oldState) => {
+        stateDisplay.textContent = GameState[newState];
+      });
+      
+      function transitionState(newState) {
+        gsm.transitionTo(newState);
+      }
+      
+      // GlobalEventBus
+      const eventBus = new GlobalEventBus();
+      const eventsDiv = document.getElementById('events');
+      eventBus.addEventListener('ON_GAME_START', () => addEvent('ON_GAME_START'));
+      eventBus.addEventListener('ON_HERO_DEATH', () => addEvent('ON_HERO_DEATH'));
+      eventBus.addEventListener('ON_MATCH_END', () => addEvent('ON_MATCH_END'));
+      
+      function triggerEvent(name) {
+        eventBus.triggerEvent(name);
+      }
+      
+      function addEvent(name) {
+        const div = document.createElement('div');
+        div.className = 'event';
+        div.textContent = name;
+        eventsDiv.insertBefore(div, eventsDiv.firstChild);
+      }
+      
+      // SaveSystem
+      const saveSystem = SaveSystem.getInstance();
+      const saveDiv = document.getElementById('save');
+      
+      function loadSave() {
+        const data = saveSystem.load();
+        saveDiv.innerHTML = `
+          PlayerName: ${data.PlayerName}<br>
+          AccountLevel: ${data.AccountLevel}<br>
+          BP_Balance: ${data.BP_Balance}<br>
+          Diamond_Balance: ${data.Diamond_Balance}<br>
+          OwnedHeroes: ${data.OwnedHeroes.join(', ')}<br>
+          AudioVol: ${data.Settings.AudioVol}<br>
+          Sensitivity: ${data.Settings.Sensitivity}
+        `;
+      }
+      
+      function testSave() {
+        loadSave();
+        const testData = saveSystem.load();
+        testData.PlayerName = 'TestPlayer';
+        testData.AccountLevel = 5;
+        testData.BP_Balance = 1500;
+        testData.Diamond_Balance = 500;
+        testData.OwnedHeroes = ['hero1', 'hero2'];
+        testData.Settings = { AudioVol: 0.8, Sensitivity: 1.5 };
+        saveSystem.save(testData);
+        setTimeout(loadSave, 100);
+      }
+      
+      loadSave();
+    </script>
+  </div>
+</body>
+</html>
