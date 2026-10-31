@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>DEMIGODZ // OPERATION BLACKSITE</title>
+  <meta name="description" content="DEMIGODZ — a browser-native tactical FPS built with Three.js." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ff7a18'/%3E%3Ctext x='32' y='45' font-family='monospace' font-size='30' font-weight='bold' text-anchor='middle' fill='%230b0d10'%3EDG%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div id="hud" class="hidden">
+    <div class="vignette"></div>
+    <div class="grain"></div>
+
+    <header id="topbar">
+      <div class="brand">
+        <div class="logo">DG</div>
+        <div class="brand-text">
+          <h1>DEMIGODZ</h1>
+          <p>OPERATION BLACKSITE</p>
+        </div>
+      </div>
+      <div class="mission">
+        <div class="stat"><label>WAVE</label><b id="wave">01</b></div>
+        <div class="divider"></div>
+        <div class="stat"><label>HOSTILES</label><b id="hostiles">00</b></div>
+        <div class="divider"></div>
+        <div class="stat"><label>SCORE</label><b id="score">000000</b></div>
+      </div>
+    </header>
+
+    <div id="banner">
+      <div class="banner-line"></div>
+      <h2 id="banner-title">WAVE 01</h2>
+      <p id="banner-sub">HOSTILES INBOUND</p>
+      <div class="banner-line"></div>
+    </div>
+
+    <div id="crosshair">
+      <span class="ch t"></span>
+      <span class="ch b"></span>
+      <span class="ch l"></span>
+      <span class="ch r"></span>
+      <span class="ch dot"></span>
+    </div>
+    <div id="hitmarker">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div id="killfeed"></div>
+
+    <div id="vitals">
+      <div class="vital-top">
+        <span class="tag">OPERATOR // VITALS</span>
+        <span id="healthnum">100</span>
+      </div>
+      <div class="bar"><div id="healthbar"></div></div>
+      <div class="vital-bottom">
+        <span>ARMOR PLATING</span>
+        <span id="status">NOMINAL</span>
+      </div>
+    </div>
+
+    <div id="ammo">
+      <div class="weapon-name">MK-17 <em>VANGUARD</em></div>
+      <div class="ammo-line">
+        <span id="ammo-mag">30</span>
+        <span class="slash">/</span>
+        <span id="ammo-reserve">150</span>
+      </div>
+      <div id="reload-hint">RELOAD [R]</div>
+    </div>
+
+    <div id="hint">WASD MOVE &middot; SHIFT SPRINT &middot; LMB FIRE &middot; RMB ADS &middot; R RELOAD &middot; SPACE JUMP</div>
+    <div id="fps">-- FPS</div>
+  </div>
+
+  <div id="damage"></div>
+  <div id="flash"></div>
+
+  <div id="loading">
+    <div class="load-inner">
+      <div class="load-logo">DG</div>
+      <div class="load-bar"><i></i></div>
+      <div class="load-text">INITIALIZING BLACKSITE</div>
+    </div>
+  </div>
+
+  <div id="menu" class="overlay">
+    <div class="menu-bg"></div>
+    <div class="menu-inner">
+      <div class="menu-kicker">TACTICAL SIMULATION // v1.0</div>
+      <h1 class="title">DEMIGODZ</h1>
+      <h2 class="subtitle">OPERATION <span>BLACKSITE</span></h2>
+      <p class="blurb">Hostile autonomous units have breached the compound.<br/>Hold the yard, clear the waves, and extract with the Blacksite intel.</p>
+      <button id="deploy" type="button"><span>DEPLOY</span><small>CLICK TO ENGAGE</small></button>
+      <div class="controls">
+        <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVE</span></div>
+        <div><kbd>SHIFT</kbd><span>SPRINT</span></div>
+        <div><kbd>LMB</kbd><span>FIRE</span></div>
+        <div><kbd>RMB</kbd><span>AIM</span></div>
+        <div><kbd>R</kbd><span>RELOAD</span></div>
+        <div><kbd>SPACE</kbd><span>JUMP</span></div>
+      </div>
+      <div class="menu-foot">ESC TO PAUSE &middot; MOUSE REQUIRED</div>
+    </div>
+  </div>
+
+  <div id="pause" class="overlay hidden">
+    <div class="menu-inner small">
+      <div class="menu-kicker">SIMULATION PAUSED</div>
+      <h2 class="subtitle">STAND <span>BY</span></h2>
+      <button id="resume" type="button"><span>RESUME</span><small>CLICK TO RE-ENGAGE</small></button>
+      <div class="menu-foot">ESC TO RESUME</div>
+    </div>
+  </div>
+
+  <div id="gameover" class="overlay hidden">
+    <div class="menu-inner small">
+      <div class="menu-kicker danger">OPERATOR DOWN</div>
+      <h2 class="subtitle">MISSION <span>FAILED</span></h2>
+      <div class="final-stats">
+        <div><label>WAVES SURVIVED</label><b id="final-wave">0</b></div>
+        <div><label>FINAL SCORE</label><b id="final-score">0</b></div>
+        <div><label>HOSTILES ELIMINATED</label><b id="final-kills">0</b></div>
+      </div>
+      <button id="restart" type="button"><span>REDEPLOY</span><small>RESTART SIMULATION</small></button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
