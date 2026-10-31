@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Toys vs. Nightmares — Guardian of Dreams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0b0b1c;overflow:hidden;color:#fff;
+  font-family:'Fredoka',system-ui,-apple-system,sans-serif;user-select:none;-webkit-user-select:none}
+button{font-family:inherit;color:inherit;border:none;cursor:pointer;background:none}
+#app{height:100%;width:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.screen{position:absolute;inset:0;display:none}
+.screen.on{display:block}
+
+/* ============ MENU ============ */
+#scr-menu{overflow-y:auto;overflow-x:hidden;padding:3vmin 3vmin 10vmin;
+  background:linear-gradient(180deg,#12122b 0%,#1a1a2e 45%,#23233f 100%)}
+#scr-menu::-webkit-scrollbar{width:0}
+.mhead{display:flex;align-items:center;gap:3vmin;padding:2vmin 0 1vmin}
+.mlogo{flex:1}
+.mlogo h1{font-size:7.2vmin;line-height:1;font-weight:700;color:#ffd700;
+  text-shadow:0 3px 0 #7a5b00,0 6px 14px rgba(0,0,0,.5);letter-spacing:.5px}
+.mlogo p{font-size:3.1vmin;color:#8fd8ff;margin-top:.8vmin;font-weight:600}
+.avatar{width:16vmin;height:16vmin;border-radius:50%;background:#26264c;border:4px solid #ffd700;
+  display:flex;align-items:center;justify-content:center;font-size:8vmin;flex:none;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);overflow:hidden}
+.mstats{display:flex;gap:2vmin;margin:2vmin 0}
+.mstat{flex:1;min-width:24vmin;background:#222246;border:3px solid #3a3a6e;border-radius:16px;
+  padding:1.6vmin 2.4vmin;display:flex;align-items:center;gap:1.6vmin}
+.mstat .ico{font-size:5vmin}
+.mstat .v{font-size:4.4vmin;font-weight:700;line-height:1}
+.mstat .l{font-size:2.4vmin;color:#9a9ac8;margin-top:.4vmin}
+.gld{flex:1;min-width:60vmin;background:#222246;border:3px solid #3a3a6e;border-radius:16px;padding:2vmin 3vmin;margin-top:2vmin}
+.gld .row{display:flex;align-items:baseline;gap:1.6vmin}
+.gld .glt{font-size:4.6vmin;font-weight:700;color:#ffd700}
+.gld .glx{font-size:2.6vmin;color:#9a9ac8;flex:1}
+.xpbar{height:2.6vmin;background:#15152e;border-radius:99px;margin-top:1.4vmin;overflow:hidden;border:2px solid #3a3a6e}
+.xpbar i{display:block;height:100%;background:linear-gradient(90deg,#00d4ff,#7fe9ff);border-radius:99px;transition:width .4s}
+.msec{margin-top:4vmin}
+.msec h2{font-size:4.6vmin;color:#ffd700;margin-bottom:1.6vmin;display:flex;align-items:center;gap:1.6vmin}
+.msec h2 small{font-size:2.6vmin;color:#9a9ac8;font-weight:400}
+.lvls{display:flex;flex-direction:column;gap:1.8vmin}
+.lvl{display:flex;align-items:center;gap:2.6vmin;background:#222246;border:3px solid #3a3a6e;
+  border-radius:18px;padding:2.2vmin 3vmin;text-align:left;width:100%}
+.lvl.done{border-color:#2f9e44}
+.lvl:not(.open){opacity:.55;filter:grayscale(.8)}
+.lvl .num{width:11vmin;height:11vmin;border-radius:14px;background:#1a1a3e;border:3px solid #ffd700;
+  display:flex;align-items:center;justify-content:center;font-size:5vmin;font-weight:700;color:#ffd700;flex:none}
+.lvl.done .num{border-color:#69db7c;color:#69db7c}
+.lvl .info{flex:1;min-width:0}
+.lvl .info b{font-size:4vmin;display:block}
+.lvl .info span{font-size:2.8vmin;color:#9a9ac8;display:block;margin-top:.4vmin}
+.lvl .rew{font-size:3.4vmin;color:#ffd700;font-weight:700;flex:none;text-align:right}
+.lvl .rew small{display:block;font-size:2.3vmin;color:#8fd8ff;font-weight:400}
+.units{display:flex;flex-direction:column;gap:1.6vmin}
+.ucard{display:flex;align-items:center;gap:2.4vmin;background:#222246;border:3px solid #3a3a6e;
+  border-radius:18px;padding:2vmin 2.6vmin}
+.ucard canvas{width:13vmin;height:13vmin;flex:none;background:#1a1a3e;border-radius:12px;border:2px solid #3a3a6e}
+.ucard .info{flex:1;min-width:0}
+.ucard .info b{font-size:3.8vmin;display:block}
+.ucard .info span{font-size:2.6vmin;color:#9a9ac8;display:block;line-height:1.3;margin-top:.4vmin}
+.ucard .info em{font-style:normal;font-size:2.4vmin;color:#8fd8ff}
+.lvbtn{background:linear-gradient(180deg,#ffd700,#e8a800);color:#3a2a00;font-weight:700;
+  border-radius:14px;padding:1.6vmin 3vmin;font-size:3.2vmin;box-shadow:0 3px 0 #7a5b00;flex:none}
+.lvbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a5b00}
+.lvbtn:disabled{filter:grayscale(1);opacity:.5}
+.lvbtn.max{background:linear-gradient(180deg,#69db7c,#37b24d);box-shadow:0 3px 0 #1e6b31}
+.achs{display:flex;flex-direction:column;gap:1.2vmin}
+.ach{display:flex;align-items:center;gap:2vmin;background:#1d1d3c;border-radius:12px;padding:1.4vmin 2.4vmin;
+  border:2px solid #3a3a6e}
+.ach.got{border-color:#ffd700}
+.ach .ic{font-size:4.4vmin;filter:grayscale(1);opacity:.4}
+.ach.got .ic{filter:none;opacity:1}
+.ach b{font-size:3vmin;display:block}
+.ach span{font-size:2.4vmin;color:#9a9ac8}
+.ach .gem{margin-left:auto;font-size:3.4vmin;color:#7fe9ff;font-weight:700;flex:none}
+.mbtnrow{display:flex;gap:2vmin;margin-top:5vmin}
+.mbtn{flex:1;background:#26264c;border:3px solid #4a4a8c;border-radius:16px;padding:2.4vmin;
+  font-size:3.4vmin;font-weight:600;display:flex;align-items:center;justify-content:center;gap:1.4vmin}
+.mbtn.gold{background:linear-gradient(180deg,#ffd700,#e8a800);color:#3a2a00;border:none;box-shadow:0 4px 0 #7a5b00;font-size:4vmin;font-weight:700}
+.mbtn:disabled{opacity:.45}
+
+/* ============ GAME ============ */
+#scr-game{background:#0b0b1c;display:none;align-items:center;justify-content:center}
+#scr-game.on{display:flex}
+#wrap{position:relative;width:min(100vw,calc(100vh*720/1280));height:min(100vh,calc(100vw*1280/720));
+  container-type:size;touch-action:none;overflow:hidden;border-radius:2px}
+#cv{width:100%;height:100%;display:block;touch-action:none}
+#hud{position:absolute;inset:0;pointer-events:none;z-index:5}
+.hud-top{position:absolute;top:2.5cqw;left:2.5cqw;right:2.5cqw;display:flex;align-items:flex-start;gap:2cqw}
+#dreamwrap{width:40cqw}
+#dreamwrap .lab{font-size:2.6cqw;color:#ffd700;font-weight:700;text-shadow:0 2px 3px #000;margin-bottom:.6cqw}
+#dreambar{height:5.4cqw;background:rgba(10,10,30,.75);border:2px solid #ffd700;border-radius:99px;overflow:hidden}
+#dreamfill{height:100%;width:100%;background:#51cf66;border-radius:99px;transition:width .25s,background .25s}
+#waveTxt{flex:1;text-align:center;font-size:5cqw;font-weight:700;color:#fff;text-shadow:0 2px 4px #000;margin-top:1.4cqw}
+#pauseBtn{pointer-events:auto;width:9.6cqw;height:9.6cqw;border-radius:2.4cqw;background:rgba(20,20,50,.72);
+  border:2px solid #ffd700;font-size:4.8cqw;line-height:1;display:flex;align-items:center;justify-content:center;flex:none}
+#starBox{position:absolute;left:3cqw;bottom:19cqw;font-size:5.6cqw;font-weight:700;color:#ffd700;
+  text-shadow:0 2px 0 #7a5b00,0 3px 6px #000;display:flex;align-items:center;gap:1.2cqw}
+#starBox .ico{font-size:4.6cqw}
+#powBtn{pointer-events:auto;position:absolute;right:3cqw;bottom:9cqw;width:18cqw;height:18cqw;border-radius:50%;
+  background:conic-gradient(#00d4ff 0%,rgba(255,255,255,.1) 0);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 3cqw 5cqw rgba(0,0,0,.5)}
+#powIn{width:14.6cqw;height:14.6cqw;border-radius:50%;background:#14142e;border:2.5px solid rgba(0,212,255,.6);
+  display:flex;align-items:center;justify-content:center;font-size:7cqw;filter:grayscale(.9);transition:filter .3s}
+#powBtn.ready #powIn{filter:none;animation:powpulse 1s infinite}
+#powBtn.ready{animation:powring 1s infinite}
+@keyframes powpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes powring{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#barUnits{pointer-events:auto;position:absolute;left:2.5cqw;right:22.5cqw;bottom:2.4cqw;height:15cqw;
+  display:flex;gap:1.6cqw;overflow-x:auto;overflow-y:hidden;padding:.4cqw 0;scrollbar-width:none}
+#barUnits::-webkit-scrollbar{display:none}
+.ubtn{position:relative;flex:none;width:14cqw;height:14cqw;border-radius:2.6cqw;background:#222246;
+  border:3px solid #4a4a8c;display:flex;flex-direction:column;overflow:hidden}
+.ubtn canvas{width:100%;height:78%;object-fit:contain}
+.ubtn .cost{height:22%;font-size:2.9cqw;font-weight:700;color:#ffd700;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35)}
+.ubtn.sel{border-color:#ffd700;background:#3a3a6e;transform:translateY(-1cqw);box-shadow:0 0 0 1.4cqw rgba(255,215,0,.4)}
+.ubtn .cd{position:absolute;inset:0;display:none;background:rgba(5,5,20,.68);border-radius:2.2cqw}
+.ubtn.cd .cd{display:block}
+.ubtn.noafford .cost{color:#ff8787}
+.ubtn.noafford canvas{filter:grayscale(1) brightness(.6)}
+.ubtn.locked{opacity:.4;filter:grayscale(1)}
+.ubtn.locked::after{content:attr(data-glt);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,20,.7);font-size:2.6cqw;color:#9a9ac8;text-align:center;border-radius:2.2cqw}
+
+/* overlays */
+.ov{position:absolute;inset:0;background:rgba(8,8,22,.82);display:none;z-index:20;
+  align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:6cqw}
+.ov.on{display:flex}
+.ov h2{font-size:9cqw;font-weight:700;text-shadow:0 3px 0 #0005}
+.ov .sub{font-size:3.8cqw;color:#9a9ac8;margin:2cqw 0 5cqw}
+.rewrow{display:flex;gap:4cqw;margin-bottom:6cqw}
+.rew{background:#222246;border:3px solid #3a3a6e;border-radius:16px;padding:3cqw 5cqw;min-width:20cqw}
+.rew .v{font-size:7cqw;font-weight:700;color:#ffd700}
+.rew .l{font-size:2.8cqw;color:#9a9ac8}
+.ovbtns{display:flex;flex-direction:column;gap:3cqw;width:72cqw}
+.rbtn{background:linear-gradient(180deg,#ffd700,#e8a800);color:#3a2a00;font-weight:700;font-size:5cqw;
+  padding:3.4cqw;border-radius:4cqw;box-shadow:0 3px 0 #7a5b00}
+.rbtn:active{transform:translateY(2px)}
+.rbtn.dim{background:#26264c;color:#fff;border:3px solid #4a4a8c;box-shadow:none}
+.rbtn:disabled{filter:grayscale(1);opacity:.5}
+.ahts{font-size:3.2cqw;color:#7fe9ff;margin-bottom:4cqw;min-height:4cqw}
+#ov-pause h2{color:#ffd700}
+.tglrow{font-size:3.4cqw;color:#9a9ac8;margin-bottom:6cqw}
+.tglrow button{color:#00d4ff;text-decoration:underline;font-size:3.4cqw}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- MAIN MENU -->
+  <div id="scr-menu" class="screen on">
+    <div class="mhead">
+      <div class="mlogo">
+        <h1>TOYS vs. NIGHTMARES</h1>
+        <p>Jadilah Guardian tak terlihat 🌙 Lindungi tidur si kecil!</p>
+      </div>
+      <div class="avatar">🧸</div>
+    </div>
+    <div class="mstats">
+      <div class="mstat"><span class="ico">🌙</span><div><div class="v" id="mMoons">0</div><div class="l">Bulan</div></div></div>
+      <div class="mstat"><span class="ico">💎</span><div><div class="v" id="mGems">0</div><div class="l">Permata</div></div></div>
+    </div>
+    <div class="gld">
+      <div class="row"><span class="glt" id="mGL">GL 1</span><span class="glx" id="mNext">Mainan berikutnya: —</span></div>
+      <div class="xpbar"><i id="xpFill" style="width:0%"></i></div>
+    </div>
+    <div class="mbtnrow">
+      <button class="mbtn gold" id="btnDaily">🎁 Bonus Harian</button>
+      <button class="mbtn" id="btnMusic">🔊 Suara: ON</button>
+    </div>
+    <div class="msec"><h2>🌙 Pilih Malam <small>6 malam penuh mimpi buruk</small></h2><div class="lvls" id="lvlList"></div></div>
+    <div class="msec"><h2>🧸 Konsentrasi Pasukan <small>upgrade permanen dengan Bulan</small></h2><div class="units" id="unitList"></div></div>
+    <div class="msec"><h2>🏆 Trofi</h2><div class="achs" id="achList"></div></div>
+  </div>
+
+  <!-- GAME -->
+  <div id="scr-game" class="screen">
+    <div id="wrap">
+      <canvas id="cv"></canvas>
+      <div id="hud">
+        <div class="hud-top">
+          <div id="dreamwrap"><div class="lab">💤 DREAM METER</div><div id="dreambar"><div id="dreamfill"></div></div></div>
+          <div id="waveTxt">Wave 1/5</div>
+          <button id="pauseBtn">⏸</button>
+        </div>
+        <div id="starBox"><span class="ico">⭐</span><span id="starVal">50</span></div>
+        <div id="barUnits"></div>
+        <div id="powBtn"><div id="powIn">✨</div></div>
+      </div>
+      <div id="ov-pause" class="ov">
+        <h2>PAUSED</h2>
+        <div class="tglrow">Musik & SFX: <button id="btnMusic2">ON</button></div>
+        <div class="ovbtns">
+          <button class="rbtn" id="btnResume">▶ Lanjutkan</button>
+          <button class="rbtn dim" id="btnRetry2">↻ Ulangi Malam</button>
+          <button class="rbtn dim" id="btnQuit1">🏠 Menu Utama</button>
+        </div>
+      </div>
+      <div id="ov-result" class="ov">
+        <h2 id="resTitle">MENANG!</h2>
+        <div class="sub" id="resSub">Mimpi si kecil tetap aman.</div>
+        <div class="rewrow">
+          <div class="rew"><div class="v" id="resMoons">+30</div><div class="l">🌙 Bulan</div></div>
+          <div class="rew"><div class="v" id="resXP">+40</div><div class="l">⭐ XP</div></div>
+          <div class="rew" id="resGemBox"><div class="v" id="resGems">+3</div><div class="l">💎 Permata</div></div>
+        </div>
+        <div class="ahts" id="resAch"></div>
+        <div class="ovbtns">
+          <button class="rbtn" id="btnNext">➡ Malam Berikutnya</button>
+          <button class="rbtn dim" id="btnRetry">↻ Main Lagi</button>
+          <button class="rbtn dim" id="btnQuit2">🏠 Menu Utama</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/draw.js"></script>
+<script src="js/game.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
