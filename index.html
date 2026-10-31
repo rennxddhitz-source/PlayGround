@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#08060e" />
+  <meta name="description" content="Soul Knight Prequel: Adventure — a time-loop pixel ARPG dungeon crawler. Build a knight, enter a procedural dungeon, collect 224 weapons and break the loop." />
+  <title>Soul Knight Prequel: Adventure</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="game" width="480" height="270" aria-label="Soul Knight Prequel game world"></canvas>
+    <div class="crt" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+  </div>
+
+  <div id="ui-layer">
+    <!-- ══ TITLE ══════════════════════════════════════════════════════════ -->
+    <section id="screen-title" class="screen screen-title">
+      <div class="title-scrim"></div>
+      <div class="title-topbar">
+        <div class="title-mark"><span class="mark-diamond"></span><span>THE LOOP REMEMBERS</span></div>
+        <div class="top-actions">
+          <button id="btn-mute-title" class="icon-btn" title="Toggle audio" aria-label="Toggle audio">♪</button>
+          <button id="btn-full-title" class="icon-btn" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+        </div>
+      </div>
+      <div class="title-content">
+        <div class="title-kicker"><span class="rule"></span>A TIME-LOOP ACTION RPG<span class="rule"></span></div>
+        <h1 class="title-logo"><span class="logo-soul">SOUL</span><span class="logo-knight">KNIGHT</span></h1>
+        <div class="title-sub">PREQUEL <span class="dot">◆</span> ADVENTURE</div>
+        <p class="title-blurb">The world ended. Again.<br />Only the loop remembers your name.</p>
+        <div class="title-menu">
+          <button id="btn-play" class="btn btn-primary btn-xl"><span>PLAY</span><small>ENTER THE LOOP</small></button>
+          <div class="title-menu-row">
+            <button id="btn-howto" class="btn btn-ghost">HOW TO PLAY</button>
+            <button id="btn-title-settings" class="btn btn-ghost">SETTINGS</button>
+          </div>
+        </div>
+        <div class="title-chips">
+          <span class="chip">224 WEAPONS</span>
+          <span class="chip">8 ELEMENTS</span>
+          <span class="chip">5–18 ROOMS</span>
+          <span class="chip">3 CLASSES</span>
+        </div>
+      </div>
+      <div class="title-footer">
+        <span>v1.0 · A pixel action RPG</span>
+        <span class="title-footer-controls">WASD MOVE · CLICK ATTACK · SHIFT DODGE · Q / E SKILLS</span>
+      </div>
+      <div class="title-tip">TIP · Tap the world to attack. Elements deal 1.5× damage.</div>
+    </section>
+
+    <!-- ══ TOWN ═══════════════════════════════════════════════════════════ -->
+    <section id="screen-town" class="screen screen-town hidden">
+      <div class="town-top">
+        <div class="brand-mini">
+          <span class="brand-rune">SK</span>
+          <div><b>TOWN OF LAST LIGHT</b><small>HUB · PREPARE FOR THE LOOP</small></div>
+        </div>
+        <div class="res-bar">
+          <span class="res-pill" title="Gold"><img data-icon="gold" alt="" /><b id="town-gold">0</b></span>
+          <span class="res-pill" title="Gems"><img data-icon="gem" alt="" /><b id="town-gems">0</b></span>
+          <span class="res-pill" title="Echoes"><img data-icon="echo" alt="" /><b id="town-echoes">0</b></span>
+          <span class="res-pill mat" title="Iron"><img data-icon="iron" alt="" /><b id="town-iron">0</b></span>
+          <span class="res-pill mat" title="Essence"><img data-icon="essence" alt="" /><b id="town-essence">0</b></span>
+          <span class="res-pill mat" title="Crystals"><img data-icon="crystal" alt="" /><b id="town-crystal">0</b></span>
+        </div>
+        <div class="town-tools">
+          <button id="btn-town-mute" class="icon-btn" aria-label="Toggle audio">♪</button>
+          <button id="btn-town-pause" class="icon-btn" aria-label="Menu">≡</button>
+        </div>
+      </div>
+
+      <div class="town-status">
+        <div class="town-level"><span class="lvl-ring"><b id="town-level">1</b></span><div><small>KNIGHT OF THE LOOP</small><strong id="town-name">THE WANDERER</strong></div></div>
+        <div class="town-xp"><div class="xp-track"><i id="town-xp-fill"></i></div><span id="town-xp-text">0 / 0 XP</span></div>
+        <div class="town-quickstats">
+          <span><i>HP</i><b id="town-hp">0</b></span>
+          <span><i>DPS</i><b id="town-dps">0</b></span>
+          <span><i>POTIONS</i><b id="town-potions">0</b></span>
+        </div>
+      </div>
+
+      <div id="interact-prompt" class="interact-prompt hidden"><kbd>F</kbd><span id="interact-text">Interact</span></div>
+
+      <div class="town-dock">
+        <button class="dock-btn" data-town="gate"><span class="dock-glyph" style="--c:#b07bff">RUN</span><b>DUNGEON</b><small>Descend</small></button>
+        <button class="dock-btn" data-town="forge"><span class="dock-glyph" style="--c:#ff9b4a">FRG</span><b>FORGE</b><small>Arsenal</small></button>
+        <button class="dock-btn" data-town="skills"><span class="dock-glyph" style="--c:#6db8ff">SKL</span><b>SKILLS</b><small>Stats & tree</small></button>
+        <button class="dock-btn" data-town="shop"><span class="dock-glyph" style="--c:#ffd86b">SHP</span><b>MERCHANT</b><small>Potions</small></button>
+        <button class="dock-btn" data-town="codex"><span class="dock-glyph" style="--c:#8ef0c8">CDX</span><b>CODEX</b><small id="dock-collection">0/224</small></button>
+        <button class="dock-btn" data-town="echo"><span class="dock-glyph" style="--c:#c78cff">ECH</span><b>OBELISK</b><small>Permanent</small></button>
+      </div>
+      <div class="town-hint">
+        <span><kbd>WASD</kbd> walk</span><span><kbd>F</kbd> interact</span><span>Click a building to open</span>
+      </div>
+    </section>
+
+    <!-- ══ DUNGEON HUD ═══════════════════════════════════════════════════ -->
+    <section id="screen-dungeon" class="screen screen-dungeon hidden">
+      <div class="hud">
+        <div class="hud-top-left">
+          <div class="portrait"><span class="portrait-helm"></span><i id="hud-level">1</i></div>
+          <div class="bars">
+            <div class="bar hp"><span class="bar-label">HP</span><i id="hp-fill"></i><b id="hp-text">0 / 0</b></div>
+            <div class="bar mp"><span class="bar-label">MP</span><i id="mp-fill"></i><b id="mp-text">0 / 0</b></div>
+            <div class="bar xp"><i id="hud-xp-fill"></i></div>
+          </div>
+        </div>
+        <div class="hud-top-right">
+          <div class="minimap-box"><canvas id="minimap" width="80" height="80"></canvas><div class="mini-meta"><span id="room-count">ROOM 1/8</span><span id="run-time">0:00</span></div></div>
+          <div class="run-purse">
+            <span><img data-icon="gold" alt="" /><b id="hud-gold">0</b></span>
+            <span><img data-icon="gem" alt="" /><b id="hud-gems">0</b></span>
+          </div>
+          <button id="btn-pause" class="icon-btn" aria-label="Pause">II</button>
+        </div>
+
+        <div class="boss-wrap hidden" id="boss-wrap">
+          <div class="boss-head"><span class="boss-tag">BOSS</span><b id="boss-name">THE WARDEN</b><em id="boss-phase">PHASE I</em></div>
+          <div class="boss-track"><i id="boss-fill"></i></div>
+        </div>
+
+        <div id="battle-banner" class="battle-banner hidden"><b id="banner-title"></b><span id="banner-sub"></span></div>
+
+        <div class="action-cluster">
+          <button id="btn-skill1" class="action-btn skill" aria-label="Skill 1"><img id="skill1-icon" alt="" /><span class="keycap">Q</span><i class="cd" id="skill1-cd"></i><b class="cost" id="skill1-cost"></b></button>
+          <button id="btn-skill2" class="action-btn skill" aria-label="Skill 2"><img id="skill2-icon" alt="" /><span class="keycap">E</span><i class="cd" id="skill2-cd"></i><b class="cost" id="skill2-cost"></b></button>
+          <button id="btn-potion-mp" class="action-btn potion mp" aria-label="Mana flask"><span>MP</span><b id="potion-mp-count">0</b><em class="keycap">2</em></button>
+          <button id="btn-potion-hp" class="action-btn potion hp" aria-label="Health flask"><span>HP</span><b id="potion-hp-count">0</b><em class="keycap">1</em></button>
+          <button id="btn-dodge" class="action-btn dodge" aria-label="Dodge"><span>DASH</span><em class="keycap">⇧</em><i class="cd" id="dodge-cd"></i></button>
+          <button id="btn-attack" class="action-btn attack" aria-label="Attack"><span>ATK</span><em class="keycap">␣</em></button>
+        </div>
+
+        <div id="joystick" class="joystick" aria-label="Movement joystick"><div class="joy-base"></div><div id="joystick-knob" class="joy-knob"></div></div>
+
+        <div class="hud-footer">
+          <span id="biome-label">EMBER KEEP</span>
+          <span class="hud-combo" id="hud-weapon">—</span>
+          <span class="hud-hint">WASD · CLICK/SPACE ATTACK · SHIFT DASH</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MODALS / OVERLAYS ════════════════════════════════════════════ -->
+    <div id="modal" class="modal hidden" aria-live="polite">
+      <div class="modal-shade" data-close></div>
+      <div id="modal-panel" class="panel"></div>
+    </div>
+
+    <div id="boss-intro" class="boss-intro hidden">
+      <div class="boss-intro-inner">
+        <span class="boss-intro-kicker">A CHAMPION OF THE LOOP</span>
+        <b id="boss-intro-name">CINDER WARDEN</b>
+        <em id="boss-intro-title">Keeper of the First Flame</em>
+        <div class="boss-intro-line"></div>
+        <p id="boss-intro-quote">The flame remembers your name, little knight.</p>
+      </div>
+    </div>
+
+    <div id="toasts" class="toasts"></div>
+    <div id="fade" class="fade"></div>
+
+    <div id="boot" class="boot">
+      <div class="boot-mark">SK</div>
+      <div class="boot-title">SOUL KNIGHT</div>
+      <div class="boot-sub">PREQUEL · ADVENTURE</div>
+      <div class="boot-track"><i></i></div>
+      <div class="boot-tip">Lighting the lanterns...</div>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
