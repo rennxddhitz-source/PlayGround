@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0b0b" />
+  <title>BLACKSITE // ZERO HOUR</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="scene"></canvas>
+
+    <div id="hud" class="hidden" aria-hidden="true">
+      <div class="hud-top-left">
+        <div class="op-badge"><i></i> OPERATION BLACKSITE <span>// SECTOR 7</span></div>
+        <div class="objective">
+          <span class="obj-label">PRIMARY OBJECTIVE</span>
+          <span id="objective-text">HOLD THE COMPOUND</span>
+        </div>
+        <div class="wave-row">
+          <span id="wave-label">WAVE 01</span>
+          <span class="divider"></span>
+          <span id="enemy-count">HOSTILES 00</span>
+        </div>
+      </div>
+
+      <div class="compass-wrap">
+        <div class="compass"><div id="compass-strip"></div></div>
+        <div class="compass-caret"></div>
+        <div id="heading">000</div>
+      </div>
+
+      <div class="hud-top-right">
+        <div id="killfeed"></div>
+        <div class="score"><span id="score">000000</span><small>SCORE</small></div>
+      </div>
+
+      <div class="crosshair" id="crosshair">
+        <i class="ch-top"></i><i class="ch-bottom"></i><i class="ch-left"></i><i class="ch-right"></i><b class="ch-dot"></b>
+      </div>
+      <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
+      <div id="damage"></div>
+      <div id="low-health"></div>
+
+      <div id="banner">
+        <div class="banner-kicker" id="banner-kicker">INCOMING</div>
+        <div class="banner-title" id="banner-title">WAVE 01</div>
+        <div class="banner-sub" id="banner-sub">HOSTILES INBOUND</div>
+      </div>
+
+      <div class="hud-bottom-left">
+        <div class="minimap-frame">
+          <canvas id="minimap" width="190" height="190"></canvas>
+          <div class="minimap-grid"></div>
+          <span class="mini-label">TAC-MAP // LIVE</span>
+        </div>
+        <div class="vitals">
+          <div class="vitals-row"><span>OPERATOR</span><b id="health-value">100</b></div>
+          <div class="health-track"><i id="health-fill"></i></div>
+          <div class="vitals-meta"><span id="status-text">COMBAT READY</span><span>ARMOR <b>II</b></span></div>
+        </div>
+      </div>
+
+      <div class="hud-bottom-right">
+        <div class="weapon-name">M4A1 <span>// TASK FORCE</span></div>
+        <div class="ammo"><span id="ammo-mag">30</span><span class="slash">/</span><span id="ammo-reserve">120</span></div>
+        <div class="fire-mode"><span class="auto-dot"></span> AUTO <em>5.56 NATO</em></div>
+        <div class="reload-hint" id="reload-hint">RELOAD <kbd>R</kbd></div>
+      </div>
+
+      <div class="hud-bottom-center">
+        <div id="hint">WASD MOVE · SHIFT SPRINT · RMB AIM · LMB FIRE · R RELOAD</div>
+      </div>
+
+      <div id="fps"></div>
+    </div>
+
+    <div id="menu">
+      <div class="menu-vignette"></div>
+      <div class="menu-grain"></div>
+      <header class="menu-top">
+        <div class="brand"><span class="brand-mark"></span> BLACKSITE <i>//</i> TASK FORCE 141</div>
+        <div class="menu-top-right">
+          <span class="classified">CLASSIFIED</span>
+          <span>SIMULATION BUILD 1.0.7</span>
+        </div>
+      </header>
+
+      <main class="menu-left">
+        <div class="eyebrow"><span></span> OPERATION // ZERO HOUR</div>
+        <h1><span class="thin">BLACKSITE</span><span class="big">ZERO HOUR</span></h1>
+        <p class="lede">A rogue cell has seized the Al-Rashid compound. Cut off their head before the sun sets.</p>
+
+        <div class="mission-card">
+          <div class="mission-row"><span>SECTOR</span><b>AL-RASHID // 7</b></div>
+          <div class="mission-row"><span>THREAT</span><b class="threat">SEVERE</b></div>
+          <div class="mission-row"><span>WINDOW</span><b>18:42 LOCAL</b></div>
+        </div>
+
+        <button id="play" class="play-btn" aria-label="PLAY">
+          <span>PLAY</span>
+          <small>DEPLOY TO SECTOR 7</small>
+        </button>
+
+        <div class="controls">
+          <span><kbd>WASD</kbd> MOVE</span>
+          <span><kbd>SHIFT</kbd> SPRINT</span>
+          <span><kbd>RMB</kbd> AIM</span>
+          <span><kbd>LMB</kbd> FIRE</span>
+          <span><kbd>R</kbd> RELOAD</span>
+        </div>
+      </main>
+
+      <aside class="menu-right">
+        <div class="dossier-head">
+          <span>OPERATOR DOSSIER</span>
+          <b>04 / 12</b>
+        </div>
+        <div class="operator-card">
+          <div class="op-silhouette">
+            <div class="op-head"></div>
+            <div class="op-body"></div>
+            <div class="op-rifle"></div>
+          </div>
+          <div class="op-scan"></div>
+          <div class="op-tag">TF-141 // "SABLE"</div>
+        </div>
+        <div class="stat"><div><span>ACCURACY</span><b>94</b></div><i style="--v:94%"></i></div>
+        <div class="stat"><div><span>MOBILITY</span><b>88</b></div><i style="--v:88%"></i></div>
+        <div class="stat"><div><span>RESILIENCE</span><b>91</b></div><i style="--v:91%"></i></div>
+        <div class="loadout">
+          <span class="loadout-label">ACTIVE LOADOUT</span>
+          <b>M4A1</b><small>SUPPRESSED · RED DOT · 30 RND</small>
+        </div>
+      </aside>
+
+      <footer class="menu-footer">
+        <span>© 2026 BLACKSITE INTERACTIVE</span>
+        <span class="footer-mid">MOVE SILENTLY · STRIKE FIRST · LEAVE NOTHING</span>
+        <span>WEBGL2 // THREE.JS</span>
+      </footer>
+    </div>
+
+    <div id="loading">
+      <div class="load-mark"><i></i><i></i><i></i></div>
+      <p>ESTABLISHING UPLINK</p>
+      <div class="load-bar"><i></i></div>
+      <span>GENERATING SECTOR 7</span>
+    </div>
+
+    <div id="pause" class="hidden">
+      <div class="pause-panel">
+        <div class="eyebrow"><span></span> SIMULATION PAUSED</div>
+        <h2>STAND BY</h2>
+        <p>The operation is not finished. Re-enter the sector when ready.</p>
+        <button id="resume" class="play-btn"><span>RESUME</span><small>BACK TO THE FIGHT</small></button>
+        <button id="restart-pause" class="ghost-btn">RESTART OPERATION</button>
+        <div class="controls"><span><kbd>ESC</kbd> PAUSE</span><span><kbd>R</kbd> RELOAD</span><span><kbd>SHIFT</kbd> SPRINT</span></div>
+      </div>
+    </div>
+
+    <div id="death" class="hidden">
+      <div class="death-panel">
+        <div class="kia">KILLED IN ACTION</div>
+        <h2>OPERATOR DOWN</h2>
+        <p>The compound remains in hostile hands. Regroup and try again.</p>
+        <div class="death-stats">
+          <div><b id="death-score">0</b><span>SCORE</span></div>
+          <div><b id="death-kills">0</b><span>HOSTILES</span></div>
+          <div><b id="death-wave">1</b><span>WAVE</span></div>
+        </div>
+        <button id="restart" class="play-btn"><span>REDEPLOY</span><small>RESTART OPERATION</small></button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

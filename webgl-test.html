@@ -1,0 +1,47 @@
+<!doctype html>
+<html><body style="margin:0"><canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three'
+const params = new URLSearchParams(location.search)
+const lights = Number(params.get('lights') || 0)
+const shadows = params.get('shadows') !== '0'
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true })
+renderer.setSize(800, 600)
+renderer.shadowMap.enabled = shadows
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+const scene = new THREE.Scene()
+scene.background = new THREE.Color(0x223344)
+const camera = new THREE.PerspectiveCamera(60, 800/600, 0.1, 100)
+camera.position.set(3, 3, 6)
+camera.lookAt(0, 0, 0)
+const sun = new THREE.DirectionalLight(0xffaa66, 2)
+sun.position.set(5, 8, 4)
+sun.castShadow = shadows
+scene.add(sun)
+scene.add(new THREE.HemisphereLight(0x88aaff, 0x553311, 1))
+const mat = new THREE.MeshStandardMaterial({ color: 0xcc8844, metalness: 0.4, roughness: 0.5 })
+const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), mat)
+box.castShadow = box.receiveShadow = true
+scene.add(box)
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x667755, roughness: 1 }))
+ground.rotation.x = -Math.PI / 2
+ground.position.y = -1.1
+ground.receiveShadow = shadows
+scene.add(ground)
+for (let i = 0; i < lights; i++) {
+  const l = new THREE.PointLight(0xffaa55, 5, 8, 2)
+  l.position.set(Math.sin(i) * 4, 1 + (i % 3), Math.cos(i) * 4)
+  scene.add(l)
+}
+let t = 0
+function frame() {
+  requestAnimationFrame(frame)
+  t += 0.016
+  box.rotation.y = t
+  renderer.render(scene, camera)
+  document.title = `ok ${Math.round(t*60)}`
+}
+frame()
+window.__test = { renderer, scene, camera, THREE }
+</script>
+</body></html>
